@@ -1,0 +1,58 @@
+{{extend 'layout.html'}}
+
+<style>
+.button {
+  border: none;
+  color: black;
+  width: 240px;
+  height: 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 4px 4px;
+  cursor: pointer;
+}
+</style>
+
+
+{{block header}}
+<div style="background-color: #333; color:white; margin:6px; padding:6px;word-wrap:break-word;">
+  <div class="container center">
+    <div>BREMER BAY DROP OFF</div>
+  </div>
+</div>
+
+<div class="container center">
+    <h4 style="font-size:14px">{{=str(message)}}</h4>
+</div>
+
+<div class="container center">
+    <a href="http://127.0.0.1:8000/vgs_step3/default/order"><button class='button' type="button">Request Fruit</button></a>
+</div>
+
+<div class="container center">
+    <a href="http://127.0.0.1:8000/vgs_step3/default/order"><button class='button' type="button">Request Vegetables</button></a>
+</div>
+
+<div class="container center">
+    <a href="http://127.0.0.1:8000/vgs_step3/default/order"><button class='button' type="button">Request Meat</button></a>
+</div>
+
+<div class="container center">
+    <a href="http://127.0.0.1:8000/vgs_step3/default/order"><button class='button' type="button">Special Request</button></a>
+</div>
+
+
+<div class="container center">
+    <button class='button' type="button">Contact</button>
+</div>
+
+
+<div class="container center">
+    <button class='button' type="button">Register</button>
+</div>
+
+
+{{end}}
