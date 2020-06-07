@@ -8,74 +8,6 @@ def index():
 def order():
     message = session.message
     rows = db(db.products).select()
-    ## rows will be used in view to build html with {{=rows}} whereas same_rows is used below
-    ## to generate listeners for buttons which will be used in view as {{=XML(js)}}
-    same_rows = db.executesql('SELECT * FROM products;')
-    js = ''
-    index = 0
-    # generate js for plus, minus buttons and input element
-    while index < len(rows):
-        row = same_rows[index]
-        js += '<script>const minusButton'
-        js += str(row[0])
-        js += '= document.getElementById("minus'
-        js += str(row[0])
-        js += '");const plusButton'
-        js += str(row[0])
-        js += ' = document.getElementById("plus'
-        js += str(row[0])
-        js += '");const inputField'
-        js += str(row[0])
-        js += ' = document.getElementById("input'
-        js += str(row[0])
-        js += '");minusButton'
-        js += str(row[0])
-        js += '.addEventListener("click", event => {event.preventDefault();const currentValue'
-        js += str(row[0])
-        js += '= Number(inputField'
-        js += str(row[0])
-        js += '.value) || 0;inputField'
-        js += str(row[0])
-        js += '.value = currentValue'
-        js += str(row[0])
-        js += '- 1;}); plusButton'
-        js += str(row[0])
-        js += '.addEventListener("click", event => {event.preventDefault();const currentValue'
-        js += str(row[0])
-        js += '= Number(inputField'
-        js += str(row[0])
-        js += '.value) || 0; inputField'
-        js += str(row[0])
-        js += '.value = currentValue'
-        js += str(row[0])
-        js += '+ 1;});</script>'
-        index += 1
-    ## generate js for top submit button
-    js += '<script>const submit1 = document.getElementById("submit1");' + '\n' + 'var url = "http://127.0.0.1:8000/vgs_step3/default/cart.html*?"'
-    js += '\n'+ 'submit1.addEventListener("click", event => {' + '\n'
-    index = 0
-    while index < len(rows) -1:
-        js += 'url += "' + str(index) + '=" + ' + 'inputField'
-        js += str(index + 1)
-        js += '.value.toString()' + '+ "&";' + '\n'
-        index += 1
-    js += 'url += "' + str(index) + '=" + ' + 'inputField'
-    js += str(index + 1)
-    js += '.value.toString();' + '\n'
-    js += 'location.replace(url)' + '\n' + '});</script>\n'
-    ## generate js for bottom submit button
-    js += '<script>const submit2 = document.getElementById("submit2");' + '\n' + 'var url = "http://127.0.0.1:8000/vgs_step3/default/cart.html*?"'
-    js += '\n'+ 'submit2.addEventListener("click", event => {' + '\n'
-    index = 0
-    while index < len(rows) -1:
-        js += 'url += "' + str(index) + '=" + ' + 'inputField'
-        js += str(index + 1)
-        js += '.value.toString()' + '+ "&";' + '\n'
-        index += 1
-    js += 'url += "' + str(index) + '=" + ' + 'inputField'
-    js += str(index + 1)
-    js += '.value.toString();' + '\n'
-    js += 'location.replace(url)' + '\n' + '});</script>\n'
     return locals()
 
 
@@ -125,7 +57,7 @@ def grid():
 # ---- Embedded wiki (example) ----
 def wiki():
     auth.wikimenu() # add the wiki to the menu
-    return auth.wiki() 
+    return auth.wiki()
 
 # ---- Action for login/register/etc (required for auth) -----
 def user():
