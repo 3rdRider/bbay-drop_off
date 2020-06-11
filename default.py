@@ -1,18 +1,17 @@
-# ---- index page ----
 def index():
     session.message = 'Next delivery: Jul 2, 2020'
     message = session.message
     return locals()
 
 @auth.requires_login()
-def order():
+def order_fv():
     message = session.message
-    rows = db(db.products).select()
+    rows = db(db.fv.category == 'Fruit & Veg').select()
+    number_of_items = len(rows)
     return locals()
 
-
 @auth.requires_login()
-def cart():
+def cart_fv():
     from datetime import datetime
     message = session.message
     carts_id = db.carts.insert(user_id = auth.user_id, cart_time = datetime.now())
@@ -21,19 +20,18 @@ def cart():
     index = 0
     while index < len(request.vars):
         if str(request.vars[str(index)]) != '0':
-            rows = (db(db.products.id == index + 1).select())
+            rows = (db(db.fv.id == index + 1).select())
             item_name = rows[0].name
             item_desc = rows[0].description
             item_unit = rows[0].unit
             item_est_price = rows[0].est_price
             item_qty = request.vars[str(index)]
-            item_total = item_est_price * int(item_qty)
-            cart_total = float(item_total) + cart_total
+            item_total = round(item_est_price * int(item_qty),2)
+            cart_total = round(float(item_total) + cart_total,2)
             db.cart_items.insert(cart_id = carts_id, product_id = index, name = item_name, description = item_desc, unit = item_unit, est_price = item_est_price, qty = item_qty, total = item_total)
         index += 1
     rows = db(db.cart_items.cart_id == carts_id).select()
     return locals()
-
 
 @auth.requires_login()
 def history():
@@ -57,7 +55,7 @@ def grid():
 # ---- Embedded wiki (example) ----
 def wiki():
     auth.wikimenu() # add the wiki to the menu
-    return auth.wiki()
+    return auth.wiki() 
 
 # ---- Action for login/register/etc (required for auth) -----
 def user():
