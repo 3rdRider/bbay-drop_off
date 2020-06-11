@@ -51,39 +51,52 @@
 
 <!-- create the buttons, input and event listeners for each product -->
 <script>
-      function initializeProductItem(productItemElement) {
+
+      function ProductItem(productItemElement, productId) {
         const minusBtn = productItemElement.querySelector(".minus");
         const plusBtn = productItemElement.querySelector(".plus");
         const qtyInput = productItemElement.querySelector("input");
 
-        console.log("setting up", minusBtn, plusBtn, qtyInput)
-
         function alterQty(amount) {
-          const newQty = (parseInt(qtyInput.value) || 0) + amount;
-          if (newQty === 0 | newQty > 0) {
+          const newQty = getQty() + amount;
+          if ((newQty === 0) | (newQty > 0)) {
             qtyInput.value = newQty.toString();
           }
         }
 
+        function getQty() {
+          return parseInt(qtyInput.value) || 0;
+        }
+
+        function getProductId() {
+          return productId;
+        }
+
         minusBtn.addEventListener("click", () => alterQty(-1));
         plusBtn.addEventListener("click", () => alterQty(1));
+
+        return { getQty, getProductId };
+      }
+
+      function Cart(productItems) {
+
+        function getQueryString() {
+          const enc = encodeURIComponent;
+          const fragments = productItems.map(({ getQty, getProductId }) => {
+            const qty = getQty();
+            const productId = getProductId();
+            return `${enc(productId)}=${enc(qty)}`;
+          });
+          return fragments.join("&");
+        }
+
+        return { getQueryString };
       }
 
       const productItemElements = document.querySelectorAll(".product-item");
-      console.log(productItemElements);
-      for (const productItemElement of productItemElements) {
-        console.log(productItemElement);
-        initializeProductItem(productItemElement);
-      }
-</script>
-
-<script>
-    const submit1 = document.getElementById("submit1");
-    var url = "http://127.0.0.1:8000/vgs_step4/default/cart_fv.html*?";
-
-submit1.addEventListener("click", event => {
-    const cart = document.querySelectorAll("input");
-    for(var i = 0; i < cart.length; i++) {url = url + i.toString() + '=' + cart[i].qtyInput.toString() + '&'}
-    location.replace(url)
-    })
+      const productItems = [];
+      productItemElements.forEach((productItemElement, i) => {
+        productItems.push(ProductItem(productItemElement, i));
+      });
+      const cart = Cart(productItems);
 </script>
