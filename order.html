@@ -51,52 +51,55 @@
 
 <!-- create the buttons, input and event listeners for each product -->
 <script>
+  function ProductItem(productItemElement, productId) {
+      const minusBtn = productItemElement.querySelector(".minus");
+      const plusBtn = productItemElement.querySelector(".plus");
+      const qtyInput = productItemElement.querySelector("input");
 
-      function ProductItem(productItemElement, productId) {
-        const minusBtn = productItemElement.querySelector(".minus");
-        const plusBtn = productItemElement.querySelector(".plus");
-        const qtyInput = productItemElement.querySelector("input");
-
-        function alterQty(amount) {
-          const newQty = getQty() + amount;
-          if ((newQty === 0) | (newQty > 0)) {
-            qtyInput.value = newQty.toString();
-          }
+      function alterQty(amount) {
+        const newQty = getQty() + amount;
+        if ((newQty === 0) | (newQty > 0)) {
+          qtyInput.value = newQty.toString();
         }
-
-        function getQty() {
-          return parseInt(qtyInput.value) || 0;
-        }
-
-        function getProductId() {
-          return productId;
-        }
-
-        minusBtn.addEventListener("click", () => alterQty(-1));
-        plusBtn.addEventListener("click", () => alterQty(1));
-
-        return { getQty, getProductId };
       }
 
-      function Cart(productItems) {
-
-        function getQueryString() {
-          const enc = encodeURIComponent;
-          const fragments = productItems.map(({ getQty, getProductId }) => {
-            const qty = getQty();
-            const productId = getProductId();
-            return `${enc(productId)}=${enc(qty)}`;
-          });
-          return fragments.join("&");
-        }
-
-        return { getQueryString };
+      function getQty() {
+        return parseInt(qtyInput.value) || 0;
       }
 
-      const productItemElements = document.querySelectorAll(".product-item");
-      const productItems = [];
-      productItemElements.forEach((productItemElement, i) => {
-        productItems.push(ProductItem(productItemElement, i));
-      });
-      const cart = Cart(productItems);
+      function getProductId() {
+        return productId;
+      }
+
+      minusBtn.addEventListener("click", () => alterQty(-1));
+      plusBtn.addEventListener("click", () => alterQty(1));
+
+      return { getQty, getProductId };
+    }
+
+    function Cart(productItems) {
+      function getQueryString() {
+        const enc = encodeURIComponent;
+        const fragments = productItems.map(({ getQty, getProductId }) => {
+          const qty = getQty();
+          const productId = getProductId();
+          return `${enc(productId)}=${enc(qty)}`;
+        });
+        return fragments.join("&");
+      }
+
+      function getCheckoutUrl() {
+        return `http://127.0.0.1:8000/vgs_step4/default/cart_fv.html?${getQueryString()}`;
+      }
+
+      return { getQueryString, getCheckoutUrl };
+    }
+
+    const productItemElements = document.querySelectorAll(".product-item");
+    const productItems = [];
+    productItemElements.forEach((productItemElement, i) => {
+      productItems.push(ProductItem(productItemElement, i));
+    });
+    const cart = Cart(productItems);
+    console.log(cart.getCheckoutUrl());
 </script>
