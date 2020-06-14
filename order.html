@@ -103,3 +103,21 @@
     const cart = Cart(productItems);
     console.log(cart.getCheckoutUrl());
 </script>
+
+<script>
+    const submit1 = document.getElementById("submit1");
+
+    submit1.addEventListener("click", event => {
+        url = cart.getCheckoutUrl();
+        location.replace(url)
+    });
+</script>
+
+<script>
+    const submit2 = document.getElementById("submit2");
+
+    submit2.addEventListener("click", event => {
+        url = cart.getCheckoutUrl();
+        location.replace(url)
+    });
+</script>
